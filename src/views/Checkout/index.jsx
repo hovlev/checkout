@@ -1,9 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import actions from '../../actions';
 import currencyConvertor from '../../helpers/currency';
 import styles from './index.css';
 
-const Checkout = ({ checkout, dispatch }) => [(
+const Checkout = ({ checkout, incrementItem, removeItem }) => [(
   <ul
     className={styles.checkout}
     key="0"
@@ -15,7 +16,7 @@ const Checkout = ({ checkout, dispatch }) => [(
           <a
             className={styles.modifier}
             href="#removeOneItem"
-            onClick={() => dispatch({ type: actions.ITEM_INCREMENT, payload: { item, increment: -1 } })}
+            onClick={() => incrementItem(item, -1)}
           >
             -
           </a>
@@ -23,13 +24,13 @@ const Checkout = ({ checkout, dispatch }) => [(
           <a
             className={styles.modifier}
             href="#addOneItem"
-            onClick={() => dispatch({ type: actions.ITEM_INCREMENT, payload: { item, increment: 1 } })}
+            onClick={() => incrementItem(item, 1)}
           >
             +
           </a>
           <a
             href="#addOneItem"
-            onClick={() => dispatch({ type: actions.ITEM_REMOVE, payload: item })}
+            onClick={() => removeItem(item)}
           >
             Remove item
           </a>
@@ -40,8 +41,16 @@ const Checkout = ({ checkout, dispatch }) => [(
     className={styles.total}
     key="1"
   >
-      Total: {currencyConvertor(checkout.total)}
+    Total: {currencyConvertor(checkout.total)}
   </p>,
 ];
 
-export default Checkout;
+
+const mapToDispatchProps = dispatch => ({
+  incrementItem: (item, incrementBy) => dispatch({ type: actions.ITEM_INCREMENT, payload: { item, increment: incrementBy } }),
+  removeItem: item => dispatch({ type: actions.ITEM_REMOVE, payload: item }),
+});
+
+export default connect(state => ({
+  checkout: state.data.checkout,
+}), mapToDispatchProps)(Checkout);
