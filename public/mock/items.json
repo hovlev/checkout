@@ -1,0 +1,19 @@
+{
+  "items": [
+    {
+      "id": "A",
+      "description": "The SlimCase",
+      "price": 8.99
+    },
+    {
+      "id": "B",
+      "description": "MOO Hardcover Notebook",
+      "price": 14.99
+    },
+    {
+      "id": "C",
+      "description": "MOO Softcover Journal",
+      "price": 5.75
+    }
+  ]
+}
