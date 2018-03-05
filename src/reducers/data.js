@@ -12,6 +12,8 @@ const defaultItem = {
   quantity: 1,
 };
 
+// Reduces the updatedItems array into a single, total value of all the items combined
+// Is called upon every user action that potentially impacts the total combined value
 const calculateTotal = (updatedItems, state) => {
   const checkout = prop('checkout', state);
   const total = reduce(
@@ -23,6 +25,9 @@ const calculateTotal = (updatedItems, state) => {
   return assoc('checkout', updatedCheckout, state);
 };
 
+// Fired when a user selects "add to basic", checks if an item already exists,
+// if so increments the existing item in the basket. Otherwise, a new item is
+// inserted into the basket.
 const addItemToCheckout = (item, state) => {
   const itemId = prop('id', item);
   const checkout = path(['checkout', 'items'], state);
@@ -36,6 +41,9 @@ const addItemToCheckout = (item, state) => {
   return calculateTotal(updatedItems, state);
 };
 
+// Fired when a user uses the + or - button on an item that's been added to the
+// basket. Checks if an item is above zero, if a user decrements an item to 0, it is
+// automatically removed from the shopping basket.
 const incrementItem = ({ item, increment }, state) => {
   const itemId = prop('id', item);
   const checkout = path(['checkout', 'items'], state);
@@ -50,6 +58,8 @@ const incrementItem = ({ item, increment }, state) => {
   return calculateTotal(updatedItems, state);
 };
 
+// Triggered when a user removes an item manually. Returns a filtered list of items not
+// including the item with the ID that corresponds to the ID of the selected(removed) item.
 const removeItem = (item, state) => {
   const itemId = prop('id', item);
   const checkout = path(['checkout', 'items'], state);
